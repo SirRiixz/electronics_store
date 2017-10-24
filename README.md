@@ -13,6 +13,11 @@ We want to use Stripe to charge users when they purchase an electronics product.
 
 ### Steps that I followed to create this application
 
+* Create a Git Repository (stored in the hidden folder .git/)
+  ```
+  git init
+  ```
+
 * Show Atom Markdown Plugin https://github.com/atom/markdown-preview
   * Go to Atom menu: Packages > Markdown Preview > Toggle Preview (or SHIFT+CTRL+M)
 
@@ -65,6 +70,10 @@ We want to use Stripe to charge users when they purchase an electronics product.
       ```
       rails generate devise:views users
       ```
+    * Add to the Application Controller a requirement for a User to Sign In (authenticate) prior to accessing or modifying Products
+      ```
+      before_action :authenticate_user!
+      ```
   * Create a Product resource that ultimately stores an image using the [Shrine Gem](https://github.com/janko-m/shrine) and it references a User (since User has many Products)
     ```
     rails g scaffold Product name:string user:references
@@ -104,3 +113,33 @@ We want to use Stripe to charge users when they purchase an electronics product.
   ```
   rails s
   ```
+
+* Create and push to Git Repository
+  * [Create New Repo](https://github.com/new)
+  * Add, Commit and Push
+    ```
+    git add .
+    git commit -m "message describing new features"
+    git remote add origin https://github.com/SirRiixz/electronics_store.git
+    git push -u origin master
+    ```
+
+* Go to the localhost:3000 and Login to list the Products. User who can sign in should be able to create a product and the product should be associated with that user
+  * Update the New Product View to not ask for the User ID for it to be associated with by removing these lines that were automatically generated with the scaffold
+    ```
+    <div class="field">
+      <%= form.label :user_id %>
+      <%= form.text_field :user_id, id: :product_user_id %>
+    </div>
+    ```
+
+  * Instead update the Create Product Action in the Product Controller to it associates the User ID with the Product prior to saving
+    ```
+    def create
+      @product = Product.new(product_params)
+      @product.user_id = current_user.id
+    ```
+  * Update the Product List View to show the User Email instead of the User Object
+    ```
+    <td><%= product.user.email %></td>
+    ```
