@@ -143,3 +143,19 @@ We want to use Stripe to charge users when they purchase an electronics product.
     ```
     <td><%= product.user.email %></td>
     ```
+
+* Update the Gem file with strip gem for payments
+    ```
+    gem 'stripe'
+    ```
+    * run to install the gem
+    ```
+    bundle install
+    ```
+* Generate a new controller
+    ```
+    rails generate controller charges
+    ```
+    * Once you have generate the controller it
+    Shows a credit card form (using Checkout).
+    Creates the actual charges by calling our API.
